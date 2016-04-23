@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+<title>MYTIMER</title>
+<style type="text/css">
+
+* { margin:0;
+        padding: 0;
+        }
+h1 {
+        padding: 0em;
+        text-align: center;
+        }
+#cronometro { padding:0px;
+                    
+                          width: 975px;
+
+              text-align: center;
+                }
+#crono { padding: 10px 15px;
+                 width: 915px;
+
+                 border: 8px body black;
+                 
+         font: bold 5.9em digital, europa, Felix Titling ;
+         text-align: center;
+         margin: 10px  
+
+        }
+
+#cronometro [type=button]  {
+         font: bold 2.3em digital, europa, Perpetua Titling MT;
+         text-align: center;
+         
+                                                        }
+</style>
+<script type="text/javascript">
+
+	var inicio=0;
+	var vuelta=0;
+	var timeout=0;
+ 
+	function empezarDetenervuelta(elemento)
+	{
+		if(timeout==0)
+		{
+			// empieza el cronometro
+			elemento.value="STOP";
+ 
+			// Cogemos la fecha y hora actual para el cronometro y vuelta
+			inicio=vuelta=new Date().getTime();
+ 
+			
+ 
+			// Inicamos el proceso
+			funcionando();
+ 
+			// habilitamos el botón para contar las vueltas
+			document.getElementById("vuelta").disabled=true;
+		}else{
+			// detenemos el cronometro
+			elemento.value="START";
+ 
+			// deshabilitamos el boton para contar las vueltas
+		
+ 
+			// Finalizamos el cronometro
+			clearTimeout(timeout);
+			timeout=0 ;
+		}
+	}
+ 
+	function funcionando()
+	{
+		var actual = new Date().getTime();
+		var diff=new Date(actual-inicio);
+ 
+		// Mostramos la diferencia de tiempo
+		var result=LeadingZero(diff.getUTCHours())+ " : " +LeadingZero(diff.getUTCMinutes())+ " : " +LeadingZero(diff.getUTCSeconds())+ " : " +diff.getUTCMilliseconds(); 
+		document.getElementById('crono').innerHTML = result;
+ 
+		timeout=setTimeout("funcionando()",10);
+	}
+ 
+	/**
+	 * Función que muestra cada vuelta
+	 */
+	function mostrarValorActual(elemento)
+	{
+		// Cogemos al fecha actual y la restamos de la ultima vuelta
+		var actual=new Date().getTime();
+		var diff=new Date(actual-vuelta);
+ 
+		// Cogemos el nuevo valor de la vuelta
+		vuelta=new Date().getTime();
+ 
+		var ultimo=document.createElement("div");
+		ultimo.innerHTML=LeadingZero(diff.getUTCHours())+ " : " +LeadingZero(diff.getUTCMinutes())+ " : " +LeadingZero(diff.getUTCSeconds())+ " : " +diff.getUTCMilliseconds();
+ 
+		// Mostramos el último valor por vuelta
+		document.getElementById("tiempos").insertBefore(ultimo,document.getElementById("tiempos").getElementsByTagName("div")[0]);
+
+	}
+ 
+	/* Funcion que pone un 0 delante de un valor si es necesario */
+	function LeadingZero(Time) {
+		return (Time < 10 ) ? "0" + Time : + Time;
+	}
+	</script>
+ 
+	<style>
+	.crono_wrapper {float:left;text-align:center;width:500px;}
+	#tiempos {float:left;}
+	</style>
+<link href="estilo.css" media="screen" rel="StyleSheet" type="text/css">
+</head>
+ 
+<BODY BGCOLOR="#F79A0E">
+ 
+
+ <div id="cronometro">
+  <FONT FACE="Felix Titling" style="Position:Absolute; left:15%; top:5%;" COLOR="white"><div id="crono">00 : 00 : 00 : 000</div> <!--cronómetro--></FONT>
+  <form name="crono" action="#"> <! - -botones- ->
+	
+<a href="#" class="button"onclick="empezarDetenervuelta(this);mostrarValorActual(this);"style="Position:Absolute; left:43%; top:25%;"/>START/STOP</a>
+
+</div>
+<FONT FACE="Felix Titling" style="Position:Absolute; left:41%; top:35%;"  SIZE=6 COLOR="white"><div id="tiempos"><div></div></div></FONT>
+ 
+
+</body>
+</html>
